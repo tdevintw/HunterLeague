@@ -1,4 +1,4 @@
-package dev.yassiraitelghari.hunterleague.domain;
+package dev.yassiraitelghari.hunterleague.domain.enums;
 
 import lombok.Getter;
 

@@ -1,5 +1,6 @@
 package dev.yassiraitelghari.hunterleague.domain;
 
+import dev.yassiraitelghari.hunterleague.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 

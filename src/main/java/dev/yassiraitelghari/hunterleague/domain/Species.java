@@ -1,5 +1,7 @@
 package dev.yassiraitelghari.hunterleague.domain;
 
+import dev.yassiraitelghari.hunterleague.domain.enums.Difficulty;
+import dev.yassiraitelghari.hunterleague.domain.enums.SpeciesType;
 import jakarta.persistence.*;
 import lombok.*;
 
