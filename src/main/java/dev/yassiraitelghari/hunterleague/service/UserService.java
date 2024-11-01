@@ -1,9 +1,9 @@
-package dev.yassiraitelghari.hunterleague.service.v1;
+package dev.yassiraitelghari.hunterleague.service;
 
 import dev.yassiraitelghari.hunterleague.domain.User;
 import dev.yassiraitelghari.hunterleague.domain.enums.Role;
-import dev.yassiraitelghari.hunterleague.repository.v1.UserRepository;
-import dev.yassiraitelghari.hunterleague.vm.v1.FrontToBusiness.UserVm;
+import dev.yassiraitelghari.hunterleague.repository.UserRepository;
+import dev.yassiraitelghari.hunterleague.vm.FrontToBusiness.UserVm;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -55,5 +55,9 @@ public class UserService {
             }
         }
         return Optional.empty();
+    }
+
+    public Optional<User> findUserByEmail(String email){
+        return userRepository.findByEmail(email);
     }
 }

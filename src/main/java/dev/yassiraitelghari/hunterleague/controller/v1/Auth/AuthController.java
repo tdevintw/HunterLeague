@@ -1,12 +1,9 @@
 package dev.yassiraitelghari.hunterleague.controller.v1.Auth;
 
-import dev.yassiraitelghari.hunterleague.domain.User;
-import dev.yassiraitelghari.hunterleague.service.v1.UserService;
-import dev.yassiraitelghari.hunterleague.vm.v1.FrontToBusiness.UserVm;
-import jakarta.validation.Valid;
+import dev.yassiraitelghari.hunterleague.service.UserService;
+import dev.yassiraitelghari.hunterleague.vm.FrontToBusiness.UserVm;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.EntityResponse;
 
 @RestController
 @RequestMapping("/api/v1/auth")

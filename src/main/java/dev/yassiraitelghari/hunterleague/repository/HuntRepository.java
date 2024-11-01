@@ -1,4 +1,4 @@
-package dev.yassiraitelghari.hunterleague.repository.v1;
+package dev.yassiraitelghari.hunterleague.repository;
 
 import dev.yassiraitelghari.hunterleague.domain.Hunt;
 import org.springframework.data.jpa.repository.JpaRepository;
