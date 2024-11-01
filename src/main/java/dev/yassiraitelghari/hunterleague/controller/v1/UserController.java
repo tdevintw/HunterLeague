@@ -33,8 +33,11 @@ public class UserController {
     }
 
     @GetMapping("/findByName")
-    public ResponseEntity<?> searchByName(@RequestParam String name) {
-        List<User> users = userService.findByName(name);
+    public ResponseEntity<?> searchByName(@RequestParam String name, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+        if(page<1 || size <1){
+            return ResponseEntity.badRequest().body("Size and page values are incorrect");
+        }
+        List<User> users = userService.findByName(name , page-1 , size);
         List<UserDTO> mappedUsers = users.stream().map(userMapper::userToUserDTO).toList();
         if (users.isEmpty()) {
             return ResponseEntity.badRequest().body("There is no users with this name");

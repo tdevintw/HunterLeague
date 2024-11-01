@@ -1,6 +1,7 @@
 package dev.yassiraitelghari.hunterleague.repository;
 
 import dev.yassiraitelghari.hunterleague.domain.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +13,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     public Optional<User> findByUsername(String username);
 
-    public List<User> findByFirstNameLike(String firstName) ;
+    public List<User> findByFirstNameLike(String firstName , Pageable pageable) ;
 
     public Optional<User> findByEmail(String email);
 

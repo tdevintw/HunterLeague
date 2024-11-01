@@ -4,6 +4,8 @@ import dev.yassiraitelghari.hunterleague.domain.User;
 import dev.yassiraitelghari.hunterleague.domain.enums.Role;
 import dev.yassiraitelghari.hunterleague.repository.UserRepository;
 import dev.yassiraitelghari.hunterleague.vm.FrontToBusiness.UserVm;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -62,7 +64,8 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public List<User> findByName(String name){
-        return userRepository.findByFirstNameLike("%"+name+"%");
+    public List<User> findByName(String name , int page , int size){
+        Pageable pageable = PageRequest.of(page , size);
+        return userRepository.findByFirstNameLike("%"+name+"%" , pageable);
     }
 }
