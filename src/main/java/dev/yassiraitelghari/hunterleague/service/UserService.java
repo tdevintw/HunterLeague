@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -59,5 +60,9 @@ public class UserService {
 
     public Optional<User> findUserByEmail(String email){
         return userRepository.findByEmail(email);
+    }
+
+    public List<User> findByName(String name){
+        return userRepository.findByFirstNameLike("%"+name+"%");
     }
 }

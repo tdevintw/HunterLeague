@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -29,5 +30,16 @@ public class UserController {
             return ResponseEntity.ok(userDTO);
         }
 
+    }
+
+    @GetMapping("/findByName")
+    public ResponseEntity<?> searchByName(@RequestParam String name) {
+        List<User> users = userService.findByName(name);
+        List<UserDTO> mappedUsers = users.stream().map(userMapper::userToUserDTO).toList();
+        if (users.isEmpty()) {
+            return ResponseEntity.badRequest().body("There is no users with this name");
+        } else {
+            return ResponseEntity.ok(mappedUsers);
+        }
     }
 }
