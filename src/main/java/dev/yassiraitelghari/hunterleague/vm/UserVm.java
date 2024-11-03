@@ -1,4 +1,4 @@
-package dev.yassiraitelghari.hunterleague.vm.FrontToBusiness;
+package dev.yassiraitelghari.hunterleague.vm;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

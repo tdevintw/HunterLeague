@@ -1,7 +1,7 @@
 package dev.yassiraitelghari.hunterleague.controller.v1.Auth;
 
 import dev.yassiraitelghari.hunterleague.service.UserService;
-import dev.yassiraitelghari.hunterleague.vm.FrontToBusiness.UserVm;
+import dev.yassiraitelghari.hunterleague.vm.UserVm;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,21 +1,18 @@
-package dev.yassiraitelghari.hunterleague.dto.ModelToBusiness;
+package dev.yassiraitelghari.hunterleague.dto;
 
 import dev.yassiraitelghari.hunterleague.domain.enums.Role;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-
-public class UserDTO {
-
+@Builder
+public class UpdateUserDTO {
     private String username;
+
+    private String password;
 
     private Role role;
 
@@ -32,6 +29,5 @@ public class UserDTO {
     private LocalDateTime joinDate;
 
     private LocalDateTime licenseExpirationDate;
-
 
 }

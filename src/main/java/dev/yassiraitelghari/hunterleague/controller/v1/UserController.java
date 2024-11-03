@@ -1,15 +1,21 @@
 package dev.yassiraitelghari.hunterleague.controller.v1;
 
 import dev.yassiraitelghari.hunterleague.domain.User;
-import dev.yassiraitelghari.hunterleague.dto.ModelToBusiness.UserDTO;
+import dev.yassiraitelghari.hunterleague.dto.UpdateUserDTO;
+import dev.yassiraitelghari.hunterleague.dto.UserDTO;
+import dev.yassiraitelghari.hunterleague.exceptions.UserWithUUIDNotFound;
 import dev.yassiraitelghari.hunterleague.mapper.UserMapper;
 import dev.yassiraitelghari.hunterleague.service.UserService;
+import dev.yassiraitelghari.hunterleague.vm.UpdatedUserVM;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -34,15 +40,49 @@ public class UserController {
 
     @GetMapping("/findByName")
     public ResponseEntity<?> searchByName(@RequestParam String name, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
-        if(page<1 || size <1){
+        if (page < 1 || size < 1) {
             return ResponseEntity.badRequest().body("Size and page values are incorrect");
         }
-        List<User> users = userService.findByName(name , page-1 , size);
+        List<User> users = userService.findByName(name, page - 1, size);
         List<UserDTO> mappedUsers = users.stream().map(userMapper::userToUserDTO).toList();
         if (users.isEmpty()) {
             return ResponseEntity.badRequest().body("There is no users with this name");
         } else {
             return ResponseEntity.ok(mappedUsers);
         }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteByUUID(@PathVariable UUID id) {
+        try {
+            System.out.println("hello");
+            userService.deleteUserById(id);
+        } catch (EmptyResultDataAccessException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+        return ResponseEntity.ok("User was Deleted");
+
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody UpdateUserDTO userDTO) {
+
+        try {
+            userService.updateUser(id, userDTO);
+        } catch (UserWithUUIDNotFound e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.ok("User was updated");
+    }
+
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<?> updateUserPartially(@PathVariable UUID id , @RequestParam UpdateUserDTO userDTO){
+        try{
+         UpdatedUserVM updatedUserVM =  userService.updateUserPartially(id , userDTO) ;
+        }catch (UserWithUUIDNotFound e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.ok().body()
     }
 }
