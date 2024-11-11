@@ -38,22 +38,46 @@ public class CompetitionController {
     }
 
     @GetMapping("/filterBy/date")
-    public ResponseEntity<?> filterByDate(@RequestParam String order){
-        competitionService.
+    public ResponseEntity<?> filterByDate(@RequestParam(defaultValue = "desc") String order, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+        List<CompetitionDTO> competitionsDTO = null;
+        try {
+            competitionsDTO = competitionService.filterByDate(order, page, size);
+        } catch (InvalidParticipationRangeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.ok().body(competitionsDTO);
     }
 
-    @GetMapping("/filterBy/specie")
-    public ResponseEntity<?> filterBySpecie(@RequestParam SpeciesType speciesType){
-
+    @GetMapping("/filterBy/species")
+    public ResponseEntity<?> filterBySpecie(@RequestParam(defaultValue = "BIRD") SpeciesType speciesType, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+        List<CompetitionDTO> competitionsDTO = null;
+        try {
+            competitionsDTO = competitionService.filterBySpecie(speciesType ,page  , size);
+        } catch (InvalidParticipationRangeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.ok().body(competitionsDTO);
     }
 
     @GetMapping("/filterBy/code")
-    public ResponseEntity<?> filterByCode(@RequestParam String code){
-
+    public ResponseEntity<?> filterByCode(@RequestParam String code) {
+        CompetitionDTO competitionDTO = null;
+        try {
+            competitionDTO = competitionService.filterByCode(code);
+        } catch (InvalidParticipationRangeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.ok().body(competitionDTO);
     }
 
     @GetMapping("filterBy/status")
-    private  ResponseEntity<?> filterByStatus(@RequestParam boolean open){
-
+    private ResponseEntity<?> filterByStatus(@RequestParam(defaultValue = "true") boolean open, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+        List<CompetitionDTO> competitionsDTO = null;
+        try {
+            competitionsDTO = competitionService.filterByStatus(open ,page  , size);
+        } catch (InvalidParticipationRangeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.ok().body(competitionsDTO);
     }
 }

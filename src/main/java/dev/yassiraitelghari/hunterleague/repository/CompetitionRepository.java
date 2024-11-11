@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 @Repository
 public interface CompetitionRepository extends JpaRepository<Competition , UUID> {
@@ -19,11 +20,11 @@ public interface CompetitionRepository extends JpaRepository<Competition , UUID>
     List<Competition> findAllOrderByDateDesc(Pageable pageable);
 
     @Query(value = "SELECT * FROM Competition  c WHERE c.code = :code" , nativeQuery = true)
-    Competition findByCode(String code);
+    Optional<Competition> findByCode(String code);
 
-    Competition findAllBySpeciesType(SpeciesType speciesType);
+    List<Competition> findAllBySpeciesType(SpeciesType speciesType , Pageable pageable);
 
-    Competition findAllByOpenRegistration(boolean openRegistration);
+    List<Competition> findAllByOpenRegistration(boolean openRegistration ,Pageable pageable);
 
 
 }
