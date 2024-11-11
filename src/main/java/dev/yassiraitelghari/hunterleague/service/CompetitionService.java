@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +24,10 @@ public class CompetitionService {
 
     private final CompetitionRepository competitionRepository;
     private final CompetitionMapper competitionMapper;
+
+    public Optional<Competition> findById(UUID id){
+        return competitionRepository.findById(id);
+    }
 
     public List<CompetitionDTO> get(int page, int size) {
         Pageable pageable = PageRequest.of(--page, size);
@@ -91,5 +96,7 @@ public class CompetitionService {
         return competitionRepository.findAllByOpenRegistration(status, pageable).stream().map(competitionMapper::competitionToCompetitionDTO).toList();
     }
 
-
+    public Optional<Competition> getByCode(String code){
+        return competitionRepository.findByCode(code);
+    }
 }

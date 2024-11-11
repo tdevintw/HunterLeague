@@ -27,13 +27,13 @@ public class UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
 
+    public Optional<User> findUserById(UUID id) {
+        return userRepository.findById(id);
+    }
+
+
     public Optional<User> findUserByUsername(String username) {
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isEmpty()) {
-            return Optional.empty();
-        } else {
-            return user;
-        }
+        return userRepository.findByUsername(username);
     }
 
     public User save(UserVm userVm) {
@@ -84,7 +84,7 @@ public class UserService {
     public User updateUser(UUID id, UpdateUserDTO userDTO) {
         Optional<User> UserToUpdate = userRepository.findById(id);
         if (UserToUpdate.isEmpty()) {
-             throw new UserWithUUIDNotFound(id);
+            throw new UserWithUUIDNotFound(id);
         } else {
             User user = UserToUpdate.get();
             user.setUsername(userDTO.getUsername());
@@ -99,6 +99,10 @@ public class UserService {
             user.setLicenseExpirationDate(userDTO.getLicenseExpirationDate());
             return userRepository.save(user);
         }
+    }
+
+    public boolean isUserLicenseExpired(User user) {
+        return user.getLicenseExpirationDate().isBefore(LocalDateTime.now());
     }
 
 }
