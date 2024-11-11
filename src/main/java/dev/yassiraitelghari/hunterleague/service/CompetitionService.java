@@ -71,7 +71,11 @@ public class CompetitionService {
     }
 
     public CompetitionDTO filterByCode(String code) {
-        if(!code.contains("_")){
+        if(code.isEmpty()){
+            throw new InvalidParticipationRangeException("the code of the competition is required");
+
+        }else
+        if(!code.contains("-")){
             throw new InvalidParticipationRangeException("code format must be like : location_date");
         }
         Optional<Competition> competitionOptional = competitionRepository.findByCode(code);

@@ -60,7 +60,7 @@ public class CompetitionController {
     }
 
     @GetMapping("/filterBy/code")
-    public ResponseEntity<?> filterByCode(@RequestParam String code) {
+    public ResponseEntity<?> filterByCode(@RequestParam(defaultValue = "") String code) {
         CompetitionDTO competitionDTO = null;
         try {
             competitionDTO = competitionService.filterByCode(code);
