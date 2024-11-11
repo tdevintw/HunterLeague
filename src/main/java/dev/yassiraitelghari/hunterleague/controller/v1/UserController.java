@@ -3,10 +3,8 @@ package dev.yassiraitelghari.hunterleague.controller.v1;
 import dev.yassiraitelghari.hunterleague.domain.User;
 import dev.yassiraitelghari.hunterleague.dto.UpdateUserDTO;
 import dev.yassiraitelghari.hunterleague.dto.UserDTO;
-import dev.yassiraitelghari.hunterleague.exceptions.UserWithUUIDNotFound;
 import dev.yassiraitelghari.hunterleague.mapper.UserMapper;
 import dev.yassiraitelghari.hunterleague.service.UserService;
-import dev.yassiraitelghari.hunterleague.vm.UpdatedUserVM;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -66,23 +64,12 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody UpdateUserDTO userDTO) {
-
+    public ResponseEntity<?> update(@PathVariable UUID id, @RequestParam UpdateUserDTO userDTO) {
         try {
             userService.updateUser(id, userDTO);
-        } catch (UserWithUUIDNotFound e) {
+        } catch (UsernameNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
         return ResponseEntity.ok("User was updated");
-    }
-
-    @PatchMapping("/update/{id}")
-    public ResponseEntity<?> updateUserPartially(@PathVariable UUID id , @RequestParam UpdateUserDTO userDTO){
-        try{
-         UpdatedUserVM updatedUserVM =  userService.updateUserPartially(id , userDTO) ;
-        }catch (UserWithUUIDNotFound e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-        return ResponseEntity.ok().body()
     }
 }

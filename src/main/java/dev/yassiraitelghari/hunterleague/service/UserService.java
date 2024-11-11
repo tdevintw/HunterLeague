@@ -3,11 +3,10 @@ package dev.yassiraitelghari.hunterleague.service;
 import dev.yassiraitelghari.hunterleague.domain.User;
 import dev.yassiraitelghari.hunterleague.domain.enums.Role;
 import dev.yassiraitelghari.hunterleague.dto.UpdateUserDTO;
-import dev.yassiraitelghari.hunterleague.dto.UserDTO;
 import dev.yassiraitelghari.hunterleague.exceptions.UserWithUUIDNotFound;
 import dev.yassiraitelghari.hunterleague.repository.UserRepository;
-import dev.yassiraitelghari.hunterleague.vm.UpdatedUserVM;
 import dev.yassiraitelghari.hunterleague.vm.UserVm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,13 +20,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     public Optional<User> findUserByUsername(String username) {
         Optional<User> user = userRepository.findByUsername(username);
@@ -103,24 +101,4 @@ public class UserService {
         }
     }
 
-    public UpdatedUserVM updateUserPartially(UUID id , UpdateUserDTO updateUserDTO){
-        Optional<User> UserToUpdate = userRepository.findById(id);
-        if (UserToUpdate.isEmpty()) {
-            throw new UserWithUUIDNotFound(id);
-        } else {
-            User userToUpdate = UserToUpdate.get();
-            Optional.ofNullable(updateUserDTO.getUsername()).ifPresent(userToUpdate::setUsername);
-            Optional.ofNullable(updateUserDTO.getPassword()).ifPresent(userToUpdate::setPassword);
-            Optional.ofNullable(updateUserDTO.getRole()).ifPresent(userToUpdate::setRole);
-            Optional.ofNullable(updateUserDTO.getFirstName()).ifPresent(userToUpdate::setFirstName);
-            Optional.ofNullable(updateUserDTO.getLastName()).ifPresent(userToUpdate::setLastName);
-            Optional.ofNullable(updateUserDTO.getCin()).ifPresent(userToUpdate::setCin);
-            Optional.ofNullable(updateUserDTO.getEmail()).ifPresent(userToUpdate::setEmail);
-            Optional.ofNullable(updateUserDTO.getNationality()).ifPresent(userToUpdate::setNationality);
-            Optional.ofNullable(updateUserDTO.getJoinDate()).ifPresent(userToUpdate::setJoinDate);
-            Optional.ofNullable(updateUserDTO.getLicenseExpirationDate()).ifPresent(userToUpdate::setLicenseExpirationDate);
-       UpdatedUserVM updatedUserVM =  userRepository.save(userToUpdate) ;
-        }
-
-    }
 }
