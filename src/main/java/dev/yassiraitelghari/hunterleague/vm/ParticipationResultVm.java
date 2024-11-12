@@ -2,6 +2,8 @@ package dev.yassiraitelghari.hunterleague.vm;
 
 import dev.yassiraitelghari.hunterleague.domain.Hunt;
 import dev.yassiraitelghari.hunterleague.domain.User;
+import dev.yassiraitelghari.hunterleague.dto.HuntDTO;
+import dev.yassiraitelghari.hunterleague.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,8 +17,8 @@ import java.util.List;
 @NoArgsConstructor
 
 public class ParticipationResultVm {
-    private User user;
+    private UserDTO user;
     private String competition_code;
-    private List<Hunt> hunts;
+    private List<HuntDTO> hunts;
     private double score;
 }

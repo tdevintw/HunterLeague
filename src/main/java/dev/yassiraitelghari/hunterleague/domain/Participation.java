@@ -23,7 +23,7 @@ public class Participation{
     @ManyToOne
     private Competition competition;
 
-    @OneToMany(mappedBy = "participation")
+    @OneToMany(mappedBy = "participation" , cascade = CascadeType.ALL)
     private List<Hunt> hunts;
 
     private Double score;

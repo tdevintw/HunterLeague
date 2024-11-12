@@ -4,8 +4,13 @@ import dev.yassiraitelghari.hunterleague.domain.Competition;
 import dev.yassiraitelghari.hunterleague.domain.Hunt;
 import dev.yassiraitelghari.hunterleague.domain.Participation;
 import dev.yassiraitelghari.hunterleague.domain.User;
+import dev.yassiraitelghari.hunterleague.dto.HuntDTO;
+import dev.yassiraitelghari.hunterleague.dto.UserDTO;
 import dev.yassiraitelghari.hunterleague.exceptions.*;
+import dev.yassiraitelghari.hunterleague.mapper.HuntMapper;
+import dev.yassiraitelghari.hunterleague.mapper.UserMapper;
 import dev.yassiraitelghari.hunterleague.repository.ParticipationRepository;
+import dev.yassiraitelghari.hunterleague.vm.ParticipationResultVm;
 import dev.yassiraitelghari.hunterleague.vm.ParticipationVm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +26,8 @@ public class ParticipationService {
     private final UserService userService;
     private final CompetitionService competitionService;
     private final HuntService huntService;
+    private final UserMapper userMapper;
+    private final HuntMapper huntMapper;
 
     public Participation add(UUID id, String code) {
         Optional<User> user = userService.findUserById(id);
@@ -53,8 +60,9 @@ public class ParticipationService {
         List<Hunt> hunts;
         Participation participation;
         try {
-            hunts = huntService.getHunts(participationVm.getHunts());
-            participation = this.findById(participationVm.getParticipation_id()) ;
+            participation = this.findById(participationVm.getParticipation_id());
+            hunts = huntService.getHunts(participationVm.getHunts(), participation);
+
         } catch (SpeciesWithUUIDNotFoundException e) {
             throw new SpeciesWithUUIDNotFoundException();
         }
@@ -64,6 +72,25 @@ public class ParticipationService {
     }
 
     public Participation findById(UUID id) {
-      return  participationRepository.findById(id).orElseThrow(ParticipationWithUUIDNotFoundException::new);
+        return participationRepository.findById(id).orElseThrow(ParticipationWithUUIDNotFoundException::new);
+    }
+
+    public ParticipationResultVm findByUser(UUID user_id, UUID competition_id) {
+        Optional<User> user = userService.findUserById(user_id);
+        Optional<Competition> competition = competitionService.findById(competition_id);
+
+        if (user.isEmpty()) {
+            throw new UserWithUUIDNotFoundException(user_id);
+        } else if (competition.isEmpty()) {
+            throw new InvalidParamInputException("There is no competition with this uuid");
+        }
+        Optional<Participation> participation = participationRepository.findParticipationByUserAndAndCompetition(user.get(), competition.get());
+        if (participation.isEmpty()) {
+            throw new UserNotParticipateInCompetitionException();
+        }
+        UserDTO userDTO = userMapper.userToUserDTO(user.get());
+        List<HuntDTO> huntsDTO = participation.get().getHunts().stream().map(huntMapper::HuntToHuntDTO).toList();
+        return new ParticipationResultVm(userDTO, competition.get().getCode(), huntsDTO, participation.get().getScore());
+
     }
 }
