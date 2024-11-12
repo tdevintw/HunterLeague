@@ -2,6 +2,7 @@ package dev.yassiraitelghari.hunterleague.controller.v1;
 
 import dev.yassiraitelghari.hunterleague.domain.Participation;
 import dev.yassiraitelghari.hunterleague.service.ParticipationService;
+import dev.yassiraitelghari.hunterleague.vm.ParticipationResultVm;
 import dev.yassiraitelghari.hunterleague.vm.ParticipationVm;
 import dev.yassiraitelghari.hunterleague.vm.UserCompetitionVm;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,14 @@ public class ParticipationController {
     }
 
     @PatchMapping("/saveScore")
-    public ResponseEntity<?> saveScore(@RequestBody ParticipationVm participationVm){
-        return ResponseEntity.ok().body(participationVm);
+    public ResponseEntity<?> saveScore(@RequestBody ParticipationVm participationVm) {
+        Participation participation;
+        try {
+            participation = participationService.saveScore(participationVm);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        ParticipationResultVm participationResultVm = new ParticipationResultVm(participation.getUser(), participation.getCompetition().getCode(), participation.getHunts(), participation.getScore());
+        return ResponseEntity.ok().body(participationResultVm);
     }
 }

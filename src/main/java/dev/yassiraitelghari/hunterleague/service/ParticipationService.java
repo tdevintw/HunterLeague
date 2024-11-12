@@ -1,15 +1,16 @@
 package dev.yassiraitelghari.hunterleague.service;
 
 import dev.yassiraitelghari.hunterleague.domain.Competition;
+import dev.yassiraitelghari.hunterleague.domain.Hunt;
 import dev.yassiraitelghari.hunterleague.domain.Participation;
 import dev.yassiraitelghari.hunterleague.domain.User;
 import dev.yassiraitelghari.hunterleague.exceptions.*;
 import dev.yassiraitelghari.hunterleague.repository.ParticipationRepository;
-import lombok.Getter;
+import dev.yassiraitelghari.hunterleague.vm.ParticipationVm;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,12 +20,13 @@ public class ParticipationService {
     private final ParticipationRepository participationRepository;
     private final UserService userService;
     private final CompetitionService competitionService;
+    private final HuntService huntService;
 
     public Participation add(UUID id, String code) {
         Optional<User> user = userService.findUserById(id);
         Optional<Competition> competition = competitionService.getByCode(code);
         if (user.isEmpty()) {
-            throw new UserWithUUIDNotFound(id);
+            throw new UserWithUUIDNotFoundException(id);
         } else if (competition.isEmpty()) {
             throw new InvalidParamInputException("There is no competition with this code");
         } else if (userService.isUserLicenseExpired(user.get())) {
@@ -45,5 +47,23 @@ public class ParticipationService {
 
     public int countParticipationOfACompetition(Competition competition) {
         return participationRepository.countParticipationByCompetition(competition);
+    }
+
+    public Participation saveScore(ParticipationVm participationVm) {
+        List<Hunt> hunts;
+        Participation participation;
+        try {
+            hunts = huntService.getHunts(participationVm.getHunts());
+            participation = this.findById(participationVm.getParticipation_id()) ;
+        } catch (SpeciesWithUUIDNotFoundException e) {
+            throw new SpeciesWithUUIDNotFoundException();
+        }
+        participation.setHunts(hunts);
+        participation.setScore(huntService.getTotalScore(hunts));
+        return participationRepository.save(participation);
+    }
+
+    public Participation findById(UUID id) {
+      return  participationRepository.findById(id).orElseThrow(ParticipationWithUUIDNotFoundException::new);
     }
 }

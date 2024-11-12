@@ -53,4 +53,8 @@ public class SpeciesService {
         }
     }
 
+    public Optional<Species> find(UUID uuid){
+         return speciesRepository.findById(uuid);
+    }
+
 }

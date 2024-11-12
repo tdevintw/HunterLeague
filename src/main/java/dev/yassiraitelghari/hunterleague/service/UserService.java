@@ -3,14 +3,13 @@ package dev.yassiraitelghari.hunterleague.service;
 import dev.yassiraitelghari.hunterleague.domain.User;
 import dev.yassiraitelghari.hunterleague.domain.enums.Role;
 import dev.yassiraitelghari.hunterleague.dto.UpdateUserDTO;
-import dev.yassiraitelghari.hunterleague.exceptions.UserWithUUIDNotFound;
+import dev.yassiraitelghari.hunterleague.exceptions.UserWithUUIDNotFoundException;
 import dev.yassiraitelghari.hunterleague.repository.UserRepository;
 import dev.yassiraitelghari.hunterleague.vm.UserVm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -84,7 +83,7 @@ public class UserService {
     public User updateUser(UUID id, UpdateUserDTO userDTO) {
         Optional<User> UserToUpdate = userRepository.findById(id);
         if (UserToUpdate.isEmpty()) {
-            throw new UserWithUUIDNotFound(id);
+            throw new UserWithUUIDNotFoundException(id);
         } else {
             User user = UserToUpdate.get();
             user.setUsername(userDTO.getUsername());
