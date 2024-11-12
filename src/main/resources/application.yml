@@ -11,3 +11,9 @@
 
     autoconfigure:
       exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+    jpa:
+      properties:
+        hibernate:
+          default_schema: public
+  server:
+    port: 9999
