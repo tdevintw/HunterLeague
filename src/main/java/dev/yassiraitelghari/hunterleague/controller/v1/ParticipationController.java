@@ -2,13 +2,11 @@ package dev.yassiraitelghari.hunterleague.controller.v1;
 
 import dev.yassiraitelghari.hunterleague.domain.Participation;
 import dev.yassiraitelghari.hunterleague.service.ParticipationService;
+import dev.yassiraitelghari.hunterleague.vm.ParticipationVm;
 import dev.yassiraitelghari.hunterleague.vm.UserCompetitionVm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/participation")
@@ -28,4 +26,8 @@ public class ParticipationController {
         return ResponseEntity.ok().body("You have been registered to the competition UUID : " + participation.getId());
     }
 
+    @PatchMapping("/saveScore")
+    public ResponseEntity<?> saveScore(@RequestBody ParticipationVm participationVm){
+        return ResponseEntity.ok().body(participationVm);
+    }
 }
