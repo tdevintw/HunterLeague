@@ -99,4 +99,8 @@ public class CompetitionService {
     public Optional<Competition> getByCode(String code){
         return competitionRepository.findByCode(code);
     }
+
+    public Competition save(Competition competition){
+        return competitionRepository.save(competition);
+    }
 }

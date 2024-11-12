@@ -3,10 +3,7 @@ package dev.yassiraitelghari.hunterleague.service;
 import dev.yassiraitelghari.hunterleague.domain.Competition;
 import dev.yassiraitelghari.hunterleague.domain.Participation;
 import dev.yassiraitelghari.hunterleague.domain.User;
-import dev.yassiraitelghari.hunterleague.exceptions.CompetitionClosedException;
-import dev.yassiraitelghari.hunterleague.exceptions.ExpiredUserException;
-import dev.yassiraitelghari.hunterleague.exceptions.InvalidParamInputException;
-import dev.yassiraitelghari.hunterleague.exceptions.UserWithUUIDNotFound;
+import dev.yassiraitelghari.hunterleague.exceptions.*;
 import dev.yassiraitelghari.hunterleague.repository.ParticipationRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -34,12 +31,19 @@ public class ParticipationService {
             throw new ExpiredUserException("the user license was expired");
         } else if (!competition.get().getOpenRegistration()) {
             throw new CompetitionClosedException("This competition is no longer accept participation");
+        } else if (competition.get().getMaxParticipants() == this.countParticipationOfACompetition(competition.get())) {
+            competition.get().setOpenRegistration(false);
+            competitionService.save(competition.get());
+            throw new CompetitionMaxLimitException("Competition reached max participation");
         }
         Participation participation = new Participation();
         participation.setCompetition(competition.get());
         participation.setUser(user.get());
-       return  participationRepository.save(participation);
-        //gotta add :if the competition reach max players it will be closed .
+        return participationRepository.save(participation);
 
+    }
+
+    public int countParticipationOfACompetition(Competition competition) {
+        return participationRepository.countParticipationByCompetition(competition);
     }
 }
