@@ -28,6 +28,10 @@
         <url/>
     </scm>
     <properties>
+        <sonar.projectKey>HunterLeague</sonar.projectKey>
+        <sonar.projectName>HunterLeague</sonar.projectName>
+        <sonar.host.url>http://localhost:9000</sonar.host.url>
+        <sonar.login>sqp_07ff7185223571f7c70f2f353fe3c8ffcd6940aa</sonar.login>
         <java.version>17</java.version>
     </properties>
     <dependencies>
@@ -90,11 +94,15 @@
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct- processor</artifactId>
+            <artifactId>mapstruct-processor</artifactId>
             <version>1.5.3.Final</version>
             <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>6.3.3</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -110,6 +118,11 @@
                         </exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.9.1.2184</version>
             </plugin>
         </plugins>
     </build>

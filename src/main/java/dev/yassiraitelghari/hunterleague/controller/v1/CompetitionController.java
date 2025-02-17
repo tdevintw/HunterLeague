@@ -79,5 +79,6 @@ public class CompetitionController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
         return ResponseEntity.ok().body(competitionsDTO);
+
     }
 }
